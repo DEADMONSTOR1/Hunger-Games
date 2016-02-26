@@ -1,0 +1,7 @@
+"hunger-games"
+{
+	"base"		"base"
+	"title"		"Hunger Games"
+	"maps"		"^hg_"
+	"menusystem"	"1"
+}
