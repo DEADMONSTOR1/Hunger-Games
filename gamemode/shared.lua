@@ -4,5 +4,12 @@ GM.Email = "N/A"
 GM.Website = "N/A"
 
 function GM:Initialize()
-	-- Do stuff
+        team.SetUp( 1, "Spectating", Color( 125, 125, 125, 255 ) )
 end
+
+function GM:PlayerInitialSpawn( ply ) 
+ 
+    ply:SetTeam( 1 ) 
+ 
+end 
+ 
