@@ -2,8 +2,8 @@ util.AddNetworkString( "UpdateTheClient" )
 util.AddNetworkString( "UpdateTheClient2" )
 local round = {}
 
-roundBreak = 20
-roundTime = 300
+roundBreak = 10
+roundTime = 600
 roundTimeLeft = 9999999
 roundBreaking = false
 roundtext = "Waiting"
@@ -21,8 +21,7 @@ function round.Broadcast(Text)
 end
 
 function round.Begin()
-	players = 0 
-	if roundtext != "Playing" then
+	if roundtext != "Round is now Active" then
 		if #player.GetAll() >= 2 then
 			round.Broadcast("The Round is Starting.")
 			roundTimeLeft = roundTime
@@ -36,23 +35,29 @@ function round.Begin()
 end
 
 function round.End()
-	if roundtext != "Playing" then
+	if roundtext == "Round is now Active" then
 		round.Broadcast("The Round is ending.")
 		roundTimeLeft = roundBreak
 		roundtext = "Waiting"
 		for k, v in pairs( player.GetAll() ) do
 			v:UnSpectate()
 			v:Freeze( true )
+			v:StripWeapons()
 			timer.Simple(roundBreak, function()
+				roundtext = "Spawning"
 				v:UnSpectate()
 				v:Freeze( false )
 				v:Spawn() 
+				roundtext = "Round is now Active"
 			end)
 		end
 	end
 end
 
 function round.Handle()
+	if roundTimeLeft <= 0 then
+		roundTimeLeft = roundTime
+	end
 	if (roundTimeLeft == 9999999) then
 		if roundtext == "Waiting for Players" then
 			timer.Create( "WFP", 10, 0, function() round.Begin()  end )
@@ -67,25 +72,26 @@ function round.Handle()
 	if roundTimeLeft >= roundTime - 20 then
 		for k,v in pairs(player.GetAll()) do
 			v:GodEnable()
-			GodModeText = "Safe Time - God Mode Enabled"
+			GodModeText = "Safe Time - God Mode"
 		end
 	else
 		for k,v in pairs(player.GetAll()) do
 			v:GodDisable()
-			GodModeText = "Fight - God Mode Disabled"
+			GodModeText = "Fight"
 		end
 	end
 	
 	roundTimeLeft = roundTimeLeft - 1
 	round.SendToAllClients(roundTimeLeft, roundtext, GodModeText)
-	if (roundTimeLeft == 0) then
+	if (roundTimeLeft == 0 or roundTimeLeft >= 3500) then
+		roundTimeLeft = 0 
 		if (roundBreaking) then
 			round.Begin()
 			roundBreaking = false
 		else
 			round.End()
 			for k,v in pairs(player.GetAll()) do
-				XPSYS.AddXP(v, 10)
+				XPSYS.AddXP(v, 5)
 				v:SendLua("notification.AddLegacy('You have gained XP for playing a round of Hunger Games', NOTIFY_GENERIC, 5);")
 			end
 			roundBreaking = true
