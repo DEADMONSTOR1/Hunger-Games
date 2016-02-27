@@ -4,12 +4,11 @@ GM.Email = "N/A"
 GM.Website = "N/A"
 
 function GM:Initialize()
-        team.SetUp( 1, "Spectating", Color( 125, 125, 125, 255 ) )
+	return
 end
 
 function GM:PlayerInitialSpawn( ply ) 
  
-    ply:SetTeam( 1 ) 
 	XPSYS.AddXP(ply, 1)
  
 end 

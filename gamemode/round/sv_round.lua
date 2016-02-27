@@ -40,8 +40,10 @@ function round.End()
 		roundTimeLeft = roundBreak
 		roundtext = "Waiting"
 		for k, v in pairs( player.GetAll() ) do
+			v:UnSpectate()
 			v:Freeze( true )
 			timer.Simple(roundBreak, function()
+				v:UnSpectate()
 				v:Freeze( false )
 				v:Spawn() 
 			end)
