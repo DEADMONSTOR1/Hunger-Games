@@ -1,4 +1,4 @@
-"hunger-games"
+"hungergames"
 {
 	"base"		"base"
 	"title"		"Hunger Games"
