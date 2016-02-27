@@ -192,11 +192,11 @@ function XPSYS.UpdateThroughLevel( ply, level )
 	if level >= maxLevel then
 		sql.Query("UPDATE experience SET Level = '"..maxLevel.."' WHERE SteamID = '"..steamID.."'")	
 		XPSYS.UpdateClient(ply,tonumber(sql.QueryValue("SELECT XP FROM experience WHERE SteamID = '"..steamID.."'")),maxLevel)
-		ply:SendLua("notification.AddLegacy('Your level is set to "..maxLevel.."!', NOTIFY_GENERIC, 5);")
+		ply:SendLua("notification.AddLegacy('Your level is now "..maxLevel.."!', NOTIFY_GENERIC, 5);")
 	else
 		sql.Query("UPDATE experience SET Level = '"..level.."' WHERE SteamID = '"..steamID.."'")
 		XPSYS.UpdateClient(ply,tonumber(sql.QueryValue("SELECT XP FROM experience WHERE SteamID = '"..steamID.."'")),level)
-		ply:SendLua("notification.AddLegacy('Your level is set to "..level.."!', NOTIFY_GENERIC, 5);")
+		ply:SendLua("notification.AddLegacy('Your level is now"..level.."!', NOTIFY_GENERIC, 5);")
 	end
 end
 

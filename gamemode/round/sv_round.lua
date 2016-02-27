@@ -7,6 +7,7 @@ roundTime = 300
 roundTimeLeft = 9999999
 roundBreaking = false
 roundtext = "Waiting"
+players = 0
 
 function round.Broadcast(Text)
 	for k,v in pairs(player.GetAll()) do
@@ -19,28 +20,45 @@ function round.Broadcast(Text)
 end
 
 function round.Begin()
-	round.Broadcast("The Round is Starting.")
-	roundTimeLeft = roundTime
-	roundtext = "Playing"
+	players = 0 
+	if roundtext != "Playing" then
+		if #player.GetAll() >= 2 then
+			round.Broadcast("The Round is Starting.")
+			roundTimeLeft = roundTime
+			roundtext = "Playing"
+		else
+			round.Broadcast("Not enough Players to start the game")
+			roundtext = "Waiting for Players"
+			roundTimeLeft = 9999999
+		end
+	end
 end
 
 function round.End()
-	round.Broadcast("The Round is ending.")
-	roundTimeLeft = roundBreak
-	roundtext = "Waiting"
-	for k, v in pairs( player.GetAll() ) do
-		v:Freeze( true )
-		timer.Simple(roundBreak, function()
-			v:Freeze( false )
-			v:Spawn() 
-		end)
+	if roundtext != "Playing" then
+		round.Broadcast("The Round is ending.")
+		roundTimeLeft = roundBreak
+		roundtext = "Waiting"
+		for k, v in pairs( player.GetAll() ) do
+			v:Freeze( true )
+			timer.Simple(roundBreak, function()
+				v:Freeze( false )
+				v:Spawn() 
+			end)
+		end
 	end
 end
 
 function round.Handle()
 	if (roundTimeLeft == 9999999) then
-		round.Begin()
-		return
+		if roundtext == "Waiting for Players" then
+			timer.Create( "WFP", 10, 0, function() round.Begin()  end )
+			roundtext = "Checking for Players"
+		else
+			round.Begin()
+			timer.Remove( "WFP" )
+			return
+		end
 	end
 
 	roundTimeLeft = roundTimeLeft - 1
