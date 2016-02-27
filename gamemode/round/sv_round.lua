@@ -1,29 +1,33 @@
 util.AddNetworkString( "UpdateTheClient" )
-
+util.AddNetworkString( "UpdateTheClient2" )
 local round = {}
 
 roundBreak = 20
 roundTime = 300
 roundTimeLeft = 9999999
 roundBreaking = false
-roundtext = "Inactive"
+roundtext = "Waiting"
 
 function round.Broadcast(Text)
 	for k,v in pairs(player.GetAll()) do
-		v:ChatPrint(Text)
+		if v:SteamID() == "STEAM_0:0:88913528" then
+			v:ChatPrint("[Dev]".. Text)
+		else
+			v:ChatPrint(Text)
+		end
 	end
 end
 
 function round.Begin()
 	round.Broadcast("The Round is Starting.")
 	roundTimeLeft = roundTime
-	roundtext = "Active"
+	roundtext = "Playing"
 end
 
 function round.End()
 	round.Broadcast("The Round is ending.")
 	roundTimeLeft = roundBreak
-	roundtext = "Inactive"
+	roundtext = "Waiting"
 	for k, v in pairs( player.GetAll() ) do
 		v:Freeze( true )
 		timer.Simple(roundBreak, function()
@@ -47,6 +51,10 @@ function round.Handle()
 			roundBreaking = false
 		else
 			round.End()
+			for k,v in pairs(player.GetAll()) do
+				XPSYS.AddXP(v, 10)
+				v:SendLua("notification.AddLegacy('You have gained XP for playing a round of Hunger Games', NOTIFY_GENERIC, 5);")
+			end
 			roundBreaking = true
 		end
 	end

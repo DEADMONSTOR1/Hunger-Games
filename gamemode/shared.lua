@@ -10,6 +10,7 @@ end
 function GM:PlayerInitialSpawn( ply ) 
  
     ply:SetTeam( 1 ) 
+	XPSYS.AddXP(ply, 1)
  
 end 
  
