@@ -8,6 +8,7 @@ roundTimeLeft = 9999999
 roundBreaking = false
 roundtext = "Waiting"
 players = 0
+GodModeText = "None"
 
 function round.Broadcast(Text)
 	for k,v in pairs(player.GetAll()) do
@@ -25,7 +26,7 @@ function round.Begin()
 		if #player.GetAll() >= 2 then
 			round.Broadcast("The Round is Starting.")
 			roundTimeLeft = roundTime
-			roundtext = "Playing"
+			roundtext = "Round is now Active"
 		else
 			round.Broadcast("Not enough Players to start the game")
 			roundtext = "Waiting for Players"
@@ -63,8 +64,20 @@ function round.Handle()
 		end
 	end
 
+	if roundTimeLeft >= roundTime - 20 then
+		for k,v in pairs(player.GetAll()) do
+			v:GodEnable()
+			GodModeText = "Safe Time - God Mode Enabled"
+		end
+	else
+		for k,v in pairs(player.GetAll()) do
+			v:GodDisable()
+			GodModeText = "Fight - God Mode Disabled"
+		end
+	end
+	
 	roundTimeLeft = roundTimeLeft - 1
-	round.SendToAllClients(roundTimeLeft, roundtext)
+	round.SendToAllClients(roundTimeLeft, roundtext, GodModeText)
 	if (roundTimeLeft == 0) then
 		if (roundBreaking) then
 			round.Begin()
@@ -81,9 +94,10 @@ function round.Handle()
 end
 timer.Create("round.Handle", 1, 0, round.Handle)
 
-function round.SendToAllClients(time, text)
+function round.SendToAllClients(time, text, godmode)
 	net.Start( "UpdateTheClient" )
-		net.WriteInt(time,32)
-		net.WriteString(text,32)
+		net.WriteInt(time, 32)
+		net.WriteString(text, 32)
+		net.WriteString(godmode, 32)
 	net.Broadcast()
 end
