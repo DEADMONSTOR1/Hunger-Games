@@ -4,6 +4,12 @@ DeathMatchPos = {
   "Vector(0,0,0)"
 }
 
+DeathMatchPosAngles = {
+  "Angle(0,0,0)",  
+  "Angle(0,0,0)",
+  "Angle(0,0,0)"
+}
+
 DeathMatchTimer = 5
 function ResetAllTimers()
 	DeathMatchTimer = 5
@@ -18,6 +24,7 @@ function DeathMatchCheck()
 				if ( v:Alive() ) then 
 					for i,p in pairs(DeathMatchPos)
 						v:SetPos(DeathMatchPos[i])
+						v:SetAngle(DeathMatchPosAngles[i])
 						v:Freeze( true ) 
 						roundtext = "Round Active - DeathMatch"
 							timer.Simple(5, function()
