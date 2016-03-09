@@ -28,7 +28,7 @@ function DeathMatchCheck()
 						v:Freeze( true ) 
 						roundtext = "Round Active - DeathMatch"
 							timer.Simple(5, function()
-							v:Freeze( false )
+								v:Freeze( false )
 							end)
 					end
 				end      
