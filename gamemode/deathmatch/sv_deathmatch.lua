@@ -18,7 +18,7 @@ end
 function DeathMatchCheck()
 	if roundTimeLeft == roundTime / 4 then
 		if roundtext == "Round is now Active" then
-			timer.Create( "DeathMatchTimer", 1, 4, function() DeathMatchTimer = DeathMatchTimer - 1 end )
+			timer.Create( "DeathMatchTimer", 1, 5, function() DeathMatchTimer = DeathMatchTimer - 1 end )
 			round.BroadCast("DeathMatch Starts In" ..DeathMatchTimer)
 			for k,v in pairs(player.GetAll()) do
 				if ( v:Alive() ) then 
