@@ -18,7 +18,7 @@ function ENT:Initialize()
 end
  
 function ENT:Use( activator, caller )
-    activator:Give(tostring(table.Random(allweapons)))
+	activator:Give(tostring(table.Random(allweapons)))
 	self:Remove()
 end
  
