@@ -121,10 +121,14 @@ function round.SendToAllClients(time, text, godmode)
 end
 
 function GM:PlayerDeath( victim, inflictor, attacker )
+	
 	victim:SetTeam( 2 )
+	victim:Spectate( OBS_MODE_CHASE )
+	victim:SpectateEntity( attacker )
+	
 	if ( victim == attacker ) then
-		PrintMessage( HUD_PRINTTALK, victim:Name() .. " committed suicide." )
+		PrintMessage( HUD_PRINTCENTER, victim:Name() .. " committed suicide." )
 	else
-		PrintMessage( HUD_PRINTTALK, victim:Name() .. " was killed by " .. attacker:Name() .. "." )
+		PrintMessage( HUD_PRINTCENTER, victim:Name() .. " was killed by " .. attacker:Name() .. "." )
 	end
 end
