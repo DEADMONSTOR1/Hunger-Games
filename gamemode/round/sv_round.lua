@@ -2,6 +2,9 @@ util.AddNetworkString( "UpdateTheClient" )
 util.AddNetworkString( "UpdateTheClient2" )
 local round = {}
 
+team.SetUp( 1, "ALIVE", Color( 255, 255, 0 ) )
+team.SetUp( 2, "DEAD", Color( 255, 0, 0 ) )
+
 roundBreak = 10
 roundTime = 600
 roundTimeLeft = 9999999
@@ -19,7 +22,12 @@ function round.Broadcast(Text)
 		end
 	end
 end
-
+function round.GameEnd()
+	local AlivePlayers = team.GetPlayers( 1 )
+	if AlivePlayers <= 1 then
+		round.End()
+	end
+end
 function round.Begin()
 	if roundtext != "Round is now Active" then
 		if #player.GetAll() >= 2 then
@@ -43,11 +51,14 @@ function round.End()
 			v:UnSpectate()
 			v:Freeze( true )
 			v:StripWeapons()
+			v:GodEnable()
 			timer.Simple(roundBreak, function()
 				roundtext = "Spawning"
 				v:UnSpectate()
 				v:Freeze( false )
 				v:Spawn() 
+				v:SetTeam( 1 )
+				v:GodDisable()
 				roundtext = "Round is now Active"
 			end)
 		end
@@ -83,6 +94,7 @@ function round.Handle()
 	
 	roundTimeLeft = roundTimeLeft - 1
 	round.SendToAllClients(roundTimeLeft, roundtext, GodModeText)
+	round.GameEnd()
 	if (roundTimeLeft == 0 or roundTimeLeft >= 3500) then
 		roundTimeLeft = 0 
 		if (roundBreaking) then
@@ -106,4 +118,13 @@ function round.SendToAllClients(time, text, godmode)
 		net.WriteString(text, 32)
 		net.WriteString(godmode, 32)
 	net.Broadcast()
+end
+
+function GM:PlayerDeath( victim, inflictor, attacker )
+	victim:SetTeam( 2 )
+	if ( victim == attacker ) then
+		PrintMessage( HUD_PRINTTALK, victim:Name() .. " committed suicide." )
+	else
+		PrintMessage( HUD_PRINTTALK, victim:Name() .. " was killed by " .. attacker:Name() .. "." )
+	end
 end
