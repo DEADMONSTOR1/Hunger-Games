@@ -6,4 +6,10 @@ ENT.Author			= ""
 ENT.Contact			= ""
 ENT.Purpose			= ""
 ENT.Instructions	= ""
+
+allweapons = {
+	"weapon_rpg",
+	"weapon_crowbar"
+}
+
  
