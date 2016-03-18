@@ -8,7 +8,3 @@ include( "level/expsys.lua" )
 include( "spectating/sv_spectating.lua" )
 include( "deathmatch/sv_deathmatch.lua" )
 
-allweapons = {
-	"weapon_rpg",
-	"weapon_crowbar"
-}
