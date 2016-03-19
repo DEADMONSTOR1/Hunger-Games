@@ -27,9 +27,9 @@ function DeathMatchCheck()
 						v:SetAngle(DeathMatchPosAngles[i])
 						v:Freeze( true ) 
 						roundtext = "Round Active - DeathMatch"
-							timer.Simple(5, function()
-								v:Freeze( false )
-							end)
+						timer.Simple(5, function()
+							v:Freeze( false )
+						end)
 					end
 				end      
 			end
